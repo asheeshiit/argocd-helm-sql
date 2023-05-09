@@ -1,0 +1,64 @@
+region: us-east-1
+cloud: gcp
+accountId: "421939322861"
+ecrEndpoint: "{{ .Values.accountId }}.dkr.ecr.{{ .Values.region }}.amazonaws.com"
+bucket: ""
+logBucket: ""
+name: "scaler-component-adr"
+namespace: "default"
+httpPort: 80
+prefix: "/sc"
+project: "ads-development-382806"
+backendConfig:
+  enabled: true
+  healthCheck:
+    path: "/ready"
+image:
+  repository: "gcr.io/{{ .Values.project }}/spot-validation"
+  tag: "0.1"
+  pullPolicy: Always
+autoscaling:
+  minReplicas: 1
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 60
+  targetMemoryUtilizationPercentage: 60
+rollingUpdate:
+  maxSurge: 50%
+  maxUnavailable: 10%
+resources: { limits: {cpu: 300m, memory: 300Mi}, requests: {cpu: 250m, memory: 200Mi}}
+ingress:
+  enabled: true
+  class: gce
+service:
+  enabled: true
+hpa:
+  enabled: false
+monitoringEnabled: false
+serviceAccount: adr-sa
+preSharedCert: ad-router-v1
+configMap:
+  cloud: "{{ .Values.cloud}}"
+  httpServer:
+    port: 3000
+    type: mux
+  sc:
+    prefix: "/sc"
+    metricPrefix: "/metrics"
+    authHeader: "X-Authorization-Header"
+    authValue: "amagi123"
+  recurringTasks:
+    totalConcurrentUsersCount:
+      refreshEnabled: true
+      refreshIntervalInMin: 1   # factors of 60
+      refreshModeFactor: 1    # factors of 60
+    adrDeploymentIDs:
+      - ADR1
+      - ADR2
+  redis:
+    cluster: false
+    hosts:
+      - "10.246.237.4:6379"
+  goCache:
+    defaultExpiryInSeconds: "3600"
+    cacheClearFrequencyInSeconds: "100"
+    cacheTimeoutInSec: "3600"
