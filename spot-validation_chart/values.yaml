@@ -8,7 +8,7 @@ name: "scaler-component-adr"
 namespace: "default"
 httpPort: 80
 prefix: "/sc"
-project: "ads-development"
+project: "ads-development-382806"
 backendConfig:
   enabled: true
   healthCheck:
@@ -36,29 +36,3 @@ hpa:
 monitoringEnabled: false
 serviceAccount: adr-sa
 preSharedCert: ad-router-v1
-configMap:
-  cloud: "{{ .Values.cloud}}"
-  httpServer:
-    port: 3000
-    type: mux
-  sc:
-    prefix: "/sc"
-    metricPrefix: "/metrics"
-    authHeader: "X-Authorization-Header"
-    authValue: "amagi123"
-  recurringTasks:
-    totalConcurrentUsersCount:
-      refreshEnabled: true
-      refreshIntervalInMin: 1   # factors of 60
-      refreshModeFactor: 1    # factors of 60
-    adrDeploymentIDs:
-      - ADR1
-      - ADR2
-  redis:
-    cluster: false
-    hosts:
-      - "10.246.237.4:6379"
-  goCache:
-    defaultExpiryInSeconds: "3600"
-    cacheClearFrequencyInSeconds: "100"
-    cacheTimeoutInSec: "3600"
