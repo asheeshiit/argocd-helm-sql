@@ -8,7 +8,7 @@ name: "scaler-component-adr"
 namespace: "default"
 httpPort: 80
 prefix: "/sc"
-project: "ads-development-382806"
+project: "ads-development"
 backendConfig:
   enabled: true
   healthCheck:
