@@ -17,8 +17,9 @@ image:
   repository: "gcr.io/{{ .Values.project }}/spot-validation"
   tag: "0.1"
   pullPolicy: Always
-  pullSecrets:
-     - - name: gcr-image-repo
+  imagePullSecrets:
+    - name: "gcr-image-repo"
+
 autoscaling:
   minReplicas: 1
   maxReplicas: 2
